@@ -23,7 +23,7 @@ tasks.c:2386:8:pcTaskGetName	24	static
 tasks.c:2533:17:uxTaskGetSystemState	32	static
 tasks.c:2638:12:xTaskCatchUpTicks	24	static
 tasks.c:2736:12:xTaskIncrementTick	48	static
-tasks.c:3021:6:vTaskSwitchContext	40	static
+tasks.c:3021:6:vTaskSwitchContext	32	static
 tasks.c:3097:6:vTaskPlaceOnEventList	24	static
 tasks.c:3122:6:vTaskPlaceOnUnorderedEventList	40	static
 tasks.c:3150:10:vTaskPlaceOnEventListRestricted	32	static
