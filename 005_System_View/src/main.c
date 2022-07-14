@@ -23,6 +23,9 @@ void printMessage(char *message);
 
 int main(void)
 {
+
+  DWT ->CTRL  |= (1 << 0);  //0. biti 1 yap.
+
 	// 1.Adým Sistem saati dahili saat olarak ayarlandý.
   RCC_DeInit(); // HSI ON | HSE OFF PLL OFF | SystemClock 16 MHz
 
@@ -30,6 +33,9 @@ int main(void)
   SystemCoreClockUpdate();   // SystemCoreClock = 16 MHz
 
   Setup();
+
+  SEGGER_SYSVIEW_Conf();
+  SEGGER_SYSVIEW_Start();
 
   sprintf(myMessage, "That is a FreeRTOS Task \n");
   printMessage(myMessage);

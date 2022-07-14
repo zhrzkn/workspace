@@ -67,6 +67,13 @@ Additional information:
 #ifndef SEGGER_SYSVIEW_CONF_H
 #define SEGGER_SYSVIEW_CONF_H
 
+
+#define SEGGER_SYSVIEW_CORE_CM3  2 //Cortex-M3/M4/M7
+
+#ifndef SEGGER_SYSVIEW_CORE
+  #define SEGGER_SYSVIEW_CORE SEGGER_SYSVIEW_CORE_CM3
+#endif
+
 /*********************************************************************
 *
 *       Defines, configurable
@@ -78,6 +85,10 @@ Additional information:
 * TODO: Add your defines here.                                       *
 **********************************************************************
 */
+#define SEGGER_SYSVIEW_RTT_BUFFER_SIZE   1024 * 8
+#define SEGGER_SYSVIEW_RTT_CHANNEL      1
+
+
 
 
 #endif  // SEGGER_SYSVIEW_CONF_H
