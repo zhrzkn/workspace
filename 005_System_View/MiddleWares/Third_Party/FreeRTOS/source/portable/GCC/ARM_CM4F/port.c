@@ -411,6 +411,7 @@ void vPortEnterCritical( void )
 {
     portDISABLE_INTERRUPTS();
     uxCriticalNesting++;
+    /* selam deðiþiklik*/
 
     /* This is not the interrupt safe version of the enter critical function so
      * assert() if it is being called from an interrupt context.  Only API
