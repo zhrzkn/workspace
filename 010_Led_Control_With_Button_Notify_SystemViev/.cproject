@@ -52,9 +52,9 @@
 								</option>
 								<option id="com.atollic.truestudio.gcc.directories.select.1279416559" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../src"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/MiddleWares/Third_Party/SEGGER/Config}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/MiddleWares/Third_Party/SEGGER/OS}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/MiddleWares/Third_Party/SEGGER/SEGGER}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/MiddleWares/SEGGER/Config}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/MiddleWares/SEGGER/OS}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/MiddleWares/SEGGER/SEGGER}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/FreeRTOSConfig}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/MiddleWares/Third_Party/FreeRTOS/source/portable/GCC/ARM_CM4F}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/MiddleWares/Third_Party/FreeRTOS/source/include}&quot;"/>
@@ -122,20 +122,6 @@
 							</tool>
 							<tool id="com.atollic.truestudio.ar.base.1434487948" name="Archiver" superClass="com.atollic.truestudio.ar.base"/>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.968834644" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput"/>
-						</toolChain>
-					</folderInfo>
-					<folderInfo id="com.atollic.truestudio.exe.debug.776404239.1975526901" name="/" resourcePath="MiddleWares/Third_Party/SEGGER">
-						<toolChain id="com.atollic.truestudio.exe.debug.toolchain.1244958294" name="Atollic ARM Tools" superClass="com.atollic.truestudio.exe.debug.toolchain" unusedChildren="">
-							<option id="com.atollic.truestudio.general.runtimelib.1300271469.1070554275" name="Runtime Library" superClass="com.atollic.truestudio.general.runtimelib.1300271469"/>
-							<option id="com.atollic.truestudio.toolchain_options.mcu.245045138.349095108" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu.245045138"/>
-							<option id="com.atollic.truestudio.toolchain_options.vendor.1856809133.1013280624" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor.1856809133"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.as.302513884" name="Assembler" superClass="com.atollic.truestudio.exe.debug.toolchain.as.1778303938"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1226850831" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1835740063"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.ld.577392401" name="C Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ld.705891537"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.gpp.1949820839" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp.393479466"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.ldcc.2062562784" name="C++ Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ldcc.2056400666"/>
-							<tool id="com.atollic.truestudio.ar.base.1233068107" name="Archiver" superClass="com.atollic.truestudio.ar.base.1434487948"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.1849310317" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput.968834644"/>
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
@@ -284,10 +270,10 @@
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="/Led_Control_With_EXTI_SystemViev"/>
+			<resource resourceType="PROJECT" workspacePath="/Led_Control_With_Button_Notify_SystemViev"/>
 		</configuration>
 		<configuration configurationName="Release">
-			<resource resourceType="PROJECT" workspacePath="/Led_Control_With_EXTI_SystemViev"/>
+			<resource resourceType="PROJECT" workspacePath="/Led_Control_With_Button_Notify_SystemViev"/>
 		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
