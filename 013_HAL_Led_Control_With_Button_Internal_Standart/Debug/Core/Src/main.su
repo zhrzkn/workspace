@@ -1,0 +1,6 @@
+../Core/Src/main.c:71:5:main	72	static
+../Core/Src/main.c:147:6:SystemClock_Config	88	static
+../Core/Src/main.c:189:13:MX_GPIO_Init	40	static
+../Core/Src/main.c:226:6:readButtonStateTask	16	static
+../Core/Src/main.c:254:6:ledFlashTask	16	static
+../Core/Src/main.c:269:6:Error_Handler	4	static,ignoring_inline_asm
