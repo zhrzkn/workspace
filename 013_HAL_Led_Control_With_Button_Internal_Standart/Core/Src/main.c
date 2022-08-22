@@ -18,7 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -41,10 +40,10 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
- osThreadId buttonTaskHandle;
-osThreadId LedTaskHandle;
-/* USER CODE BEGIN PV */
 
+/* USER CODE BEGIN PV */
+TaskHandle_t myButtonTaskHandle;
+TaskHandle_t myLedTaskHandle;
 uint8_t buttonCount=0;
 
 /* USER CODE END PV */
@@ -52,8 +51,8 @@ uint8_t buttonCount=0;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-void readButtonStateTask(void const * argument);
-void ledFlashTask(void const * argument);
+void readButtonStateTask(void *params);
+void ledFlashTask(void *params);
 
 /* USER CODE BEGIN PFP */
 
@@ -114,19 +113,16 @@ int main(void)
 
   /* Create the thread(s) */
   /* definition and creation of buttonTask */
-  osThreadDef(buttonTask, readButtonStateTask, osPriorityNormal, 0, 128);
-  buttonTaskHandle = osThreadCreate(osThread(buttonTask), NULL);
-
+  xTaskCreate( readButtonStateTask, "Task of Button Control", 650,  NULL, 2, &myButtonTaskHandle);
   /* definition and creation of LedTask */
-  osThreadDef(LedTask, ledFlashTask, osPriorityBelowNormal, 0, 128);
-  LedTaskHandle = osThreadCreate(osThread(LedTask), NULL);
+ xTaskCreate( ledFlashTask, "Task of Led Control", 650, NULL, 2, &myLedTaskHandle);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
 
   /* Start scheduler */
-  osKernelStart();
+  vTaskStartScheduler();
 
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
@@ -223,7 +219,7 @@ static void MX_GPIO_Init(void)
   * @retval None
   */
 /* USER CODE END Header_readButtonStateTask */
-void readButtonStateTask(void const * argument)
+void readButtonStateTask(void *params)
 {
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
@@ -251,13 +247,40 @@ void readButtonStateTask(void const * argument)
 * @retval None
 */
 /* USER CODE END Header_ledFlashTask */
-void ledFlashTask(void const * argument)
+void ledFlashTask(void *params)
 {
   /* USER CODE BEGIN ledFlashTask */
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    if ( buttonCount ==0 )
+	              {
+	      	     HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, GPIO_PIN_RESET);
+	              }
+
+
+	        else if(buttonCount == 1)
+	              {
+	      	     HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
+	      	     vTaskDelay(1000);
+	              }
+
+	        else if(buttonCount == 2)
+	              {
+	      	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
+	      	  	  vTaskDelay(750);
+	              }
+
+	        else if(buttonCount == 3)
+	              {
+	      	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
+	      	  	  vTaskDelay(500);
+	              }
+
+	        else if(buttonCount == 4)
+	              {
+	      	      vTaskDelay(250);
+	              }
   }
   /* USER CODE END ledFlashTask */
 }
