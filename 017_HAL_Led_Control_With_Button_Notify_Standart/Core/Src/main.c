@@ -50,7 +50,7 @@ uint8_t buttonCount=0;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-void ledFlashTask(void const * argument);
+void ledFlashTask(void const * argument);   //`Standart` kodlarda void ledFlashTask(void *params); da yazılabilir. Sorun olmuyor.
 void readButtonStateTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
