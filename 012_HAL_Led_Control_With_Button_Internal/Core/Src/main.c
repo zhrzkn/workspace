@@ -238,6 +238,7 @@ void readButtonStateTask(void const * argument)
 	  	  {
 	           if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET)
 	           {
+			while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)== GPIO_PIN_SET);
 	          	buttonCount++;
 	           }
 	           if (buttonCount == 5)
@@ -262,9 +263,6 @@ void LedFlashTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-	  while (1)
-	  	  {
-
 	        if ( buttonCount ==0 )
 	              {
 	      	     HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, GPIO_PIN_RESET);
@@ -293,12 +291,10 @@ void LedFlashTask(void const * argument)
 	              {
 	      	      osDelay(250);
 	              }
-
+  }
   /* USER CODE END LedFlashTask */
 }
-  }
 
-}
   void Error_Handler(void)
   {
     /* USER CODE BEGIN Error_Handler_Debug */
