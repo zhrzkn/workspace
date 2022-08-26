@@ -58,7 +58,7 @@ void Task1_Handler(void *params)
 
 	while (1)
 	  {
-		sprintf(myMessage, "State of Led: %d  \r\n",
+		sprintf(myMessage, "Status of the Leds: %d  \r\n",
 				GPIO_ReadInputDataBit(GPIOD,GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15 ));
 		printMessage(myMessage);
 		vTaskDelay(pdMS_TO_TICKS(1000));
