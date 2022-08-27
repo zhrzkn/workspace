@@ -4,6 +4,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
+#include "timers.h"
 
 #include "string.h"
 #include "stdio.h"
@@ -32,13 +33,13 @@ void GPIO_Config();
 void USART_Config();
 uint8_t getCommandCode(uint8_t *buffer);
 uint8_t getArguments(uint8_t *buffer);
-void LED_ON_Func();
-void LED_OFF_Func();
-void LED_TOGGLE_ON_Func();
-void LED_TOGGLE_OFF_Func();
-void LED_STATUS_Func();
-void EXIT_APP_Func();
-void ERROR_MESSAGE();
+void LED_ON_Func(void);
+void LED_OFF_Func(void);
+void LED_TOGGLE_ON_Func(uint32_t duration);
+void LED_TOGGLE_OFF_Func(void);
+void LED_STATUS_Func(void);
+void EXIT_APP_Func(void);
+void ERROR_MESSAGE(char *errorMessage);
 
 
 
@@ -60,10 +61,16 @@ void Task4_Uart_Write_Handler(void *params);
 QueueHandle_t UartWriteQueue =  NULL;
 QueueHandle_t CommandQueue =  NULL;
 
+/********************** TIMERS ******************/
+TimerHandle_t ledtimerHandle = NULL;
+
 uint8_t commandbuffer[20];
 uint8_t commandlenght=0;
 
-
+void vApplicationIdleHook()
+{
+	__WFI();
+}
 void USART2_IRQHandler(void)
 {
 	uint8_t rxCaracter;
@@ -176,14 +183,17 @@ void Task2_Command_Handling_Handler(void *params)
 		  {
 			// wait notify
 			xTaskNotifyWait(0,0,NULL, portMAX_DELAY);
+			appTxCmd = (APP_COMMAND_t *) pvPortMalloc(sizeof(APP_COMMAND_t)); // Belleði oluþturuldu.
+												//pvPortMalloc: Belirli bir bellek tahsis ediyor.
 
+
+			portENTER_CRITICAL();  					//Interrupt kapatýldý.
 			// command buffer -> command queue
 			commandCode = getCommandCode(commandbuffer);
-			appTxCmd = (APP_COMMAND_t *) pvPortMalloc(sizeof(APP_COMMAND_t)); // Belleði oluþturuldu.
-									//pvPortMalloc: Belirli bir bellek tahsis ediyor.
 
 			appTxCmd -> COMMAND_NUM = commandCode;   // USART üzerinden gelen mesaj numarasý kopyalandý command num'a koyuldu.
 			getArguments(appTxCmd -> COMMAND_ARGS);
+			taskEXIT_CRITICAL();   						//Interrupt aktif hale geldi. Bu sayede arada oluþan rekabet engellendi.
 
 			xQueueSend(CommandQueue, &appTxCmd, portMAX_DELAY); // Command gönderildi.
 
@@ -195,6 +205,10 @@ void Task3_Command_Process_Handler(void *params)
 {
 
 	APP_COMMAND_t *appRxCmd= NULL;
+
+	char errorMessage[50];
+
+	uint16_t toggleTime = pdMS_TO_TICKS(500);
 
 	while (1)
 	  {
@@ -215,7 +229,7 @@ void Task3_Command_Process_Handler(void *params)
 		}
 		else if(appRxCmd->COMMAND_NUM == LED_TOGGLE_ON)
 		{
-			LED_TOGGLE_ON_Func();
+			LED_TOGGLE_ON_Func(toggleTime);   // Bu süre zarfý içerisinde toggle yapacak.
 		}
 		else if(appRxCmd->COMMAND_NUM == LED_TOGGLE_OFF)
 		{
@@ -227,7 +241,7 @@ void Task3_Command_Process_Handler(void *params)
 		}
 		else
 		{
-		    ERROR_MESSAGE();
+		    ERROR_MESSAGE(errorMessage);
 		}
 	  }
 
@@ -255,13 +269,32 @@ void LED_OFF_Func()
 {
 	GPIO_ResetBits(GPIOD, GPIO_Pin_12 |GPIO_Pin_13 |GPIO_Pin_14 |GPIO_Pin_15);
 }
-void LED_TOGGLE_ON_Func()
+
+void LED_TOGGLE(void)
 {
 	GPIO_ToggleBits(GPIOD, GPIO_Pin_12 |GPIO_Pin_13 |GPIO_Pin_14 |GPIO_Pin_15);
 }
+
+void LED_TOGGLE_ON_Func(uint32_t duration)
+{
+	if(ledtimerHandle == NULL)
+	{
+	// Software Timer Create
+	ledtimerHandle = xTimerCreate("LED TOGGLE TIMER", duration, pdTRUE, NULL, LED_TOGGLE);
+
+	// Software Timer Start
+	xTimerStart(ledtimerHandle, portMAX_DELAY);
+	}
+
+	else
+	{
+		xTimerStart(ledtimerHandle, portMAX_DELAY);
+	}
+
+}
 void LED_TOGGLE_OFF_Func()
 {
-
+	xTimerStop(ledtimerHandle, portMAX_DELAY);
 }
 void LED_STATUS_Func()
 {
@@ -271,12 +304,28 @@ void LED_STATUS_Func()
 }
 void EXIT_APP_Func()
 {
+	sprintf(myMessage, "\r\n The Application exits...\r\n");
+	printMessage(myMessage);
+
+
+	// Delete Task
+	vTaskDelete(Task1_Menu_Display_Handler);
+	vTaskDelete(Task2_Command_Handling_Handler);
+	vTaskDelete(Task3_Command_Process_Handler);
+	vTaskDelete(Task4_Uart_Write_Handler);
+
+
+	// Disable ISR
+	USART_ITConfig(USART2, USART_IT_RXNE, DISABLE);
+
+	// Disable NVIC
+	NVIC_DisableIRQ(USART2_IRQn);
 
 }
-void ERROR_MESSAGE()
+void ERROR_MESSAGE(char *errorMessage)
 {
-	sprintf(myMessage, "Wrong Value");
-	xQueueSend(UartWriteQueue, myMessage, portMAX_DELAY);
+	sprintf(errorMessage, "\r\n Wrong value... Please try again. \r\n");
+	xQueueSend(UartWriteQueue, &errorMessage, portMAX_DELAY);
 }
 uint8_t getCommandCode(uint8_t *buffer)
 {
