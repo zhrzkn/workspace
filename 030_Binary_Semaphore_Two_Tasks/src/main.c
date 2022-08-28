@@ -57,7 +57,7 @@ int main(void)
 		printMessage(myMessage);
 
 	xTaskCreate(MasterTaskHandler, "Master Task", 500, NULL, 3,NULL);
-	xTaskCreate(SlaveTaskHandler, "Slave Task", 500, NULL,   3,NULL);
+	xTaskCreate(SlaveTaskHandler, "Slave Task", 500, NULL,   1,NULL);
 
 	vTaskStartScheduler();
 	}
